@@ -1,0 +1,946 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>MOE Platform</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap">
+<style>
+/* ── Tokens ──────────────────────────────────────────────────────────────── */
+:root {
+  --cream:      #f0ead8;
+  --cream-mid:  #e8e0cc;
+  --cream-dark: #ddd4bd;
+  --charcoal:   #151920;
+  --charcoal-2: #232b35;
+  --charcoal-3: #2e3845;
+  --gold:       #c9a84c;
+  --gold-light: #e2c97a;
+  --t1:         #1e4a7c;
+  --t1-light:   #d0dff0;
+  --t2:         #1a6b50;
+  --t2-light:   #cce8de;
+  --t3:         #7a5a10;
+  --t3-light:   #ecdfc0;
+  --mid:        #888070;
+  --border:     rgba(21,25,32,.12);
+  --card:       #faf7f0;
+  --shadow:     0 1px 4px rgba(21,25,32,.08);
+  --sidebar-w:  220px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --cream:      #1a1f27;
+  --cream-mid:  #222830;
+  --cream-dark: #2a3240;
+  --charcoal:   #f0ead8;
+  --charcoal-2: #1e2530;
+  --charcoal-3: #252e3a;
+  --gold:       #d4b05a;
+  --gold-light: #b8942e;
+  --t1-light:   #0d2240;
+  --t2-light:   #0a3024;
+  --t3-light:   #3a2808;
+  --mid:        #9a9080;
+  --border:     rgba(240,234,216,.1);
+  --card:       #1e2530;
+  --shadow:     0 1px 4px rgba(0,0,0,.3);
+  color-scheme: dark;
+}}
+:root[data-theme="dark"] {
+  --cream:      #1a1f27;
+  --cream-mid:  #222830;
+  --cream-dark: #2a3240;
+  --charcoal:   #f0ead8;
+  --charcoal-2: #1e2530;
+  --charcoal-3: #252e3a;
+  --gold:       #d4b05a;
+  --gold-light: #b8942e;
+  --t1-light:   #0d2240;
+  --t2-light:   #0a3024;
+  --t3-light:   #3a2808;
+  --mid:        #9a9080;
+  --border:     rgba(240,234,216,.1);
+  --card:       #1e2530;
+  --shadow:     0 1px 4px rgba(0,0,0,.3);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: 'Inter', system-ui, sans-serif; background: var(--cream); color: var(--charcoal); }
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+.app { display: flex; height: 100%; overflow: hidden; }
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w); flex-shrink: 0;
+  background: var(--charcoal-2);
+  display: flex; flex-direction: column;
+  border-right: 1px solid rgba(201,168,76,.2);
+  overflow-y: auto;
+}
+.sidebar-logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(201,168,76,.2);
+}
+.sidebar-logo-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 600;
+  color: var(--gold);
+  letter-spacing: .02em;
+  line-height: 1.1;
+}
+.sidebar-logo-sub {
+  font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(201,168,76,.55); margin-top: 2px;
+}
+.client-pill {
+  margin: 12px 14px 0;
+  background: rgba(201,168,76,.1);
+  border: 1px solid rgba(201,168,76,.25);
+  border-radius: 6px; padding: 8px 10px;
+}
+.client-pill-name {
+  font-size: 11px; font-weight: 600; color: var(--gold);
+  letter-spacing: .03em;
+}
+.client-pill-role {
+  font-size: 9.5px; color: rgba(201,168,76,.5);
+  margin-top: 1px;
+}
+.nav-section { padding: 16px 0 4px; }
+.nav-label {
+  font-size: 8.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(240,234,216,.25); padding: 0 20px 6px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 20px; cursor: pointer;
+  font-size: 12.5px; font-weight: 400;
+  color: rgba(240,234,216,.55);
+  border-left: 2px solid transparent;
+  transition: all .15s;
+}
+.nav-item:hover { color: rgba(240,234,216,.85); background: rgba(255,255,255,.04); }
+.nav-item.active {
+  color: var(--gold); font-weight: 500;
+  border-left-color: var(--gold);
+  background: rgba(201,168,76,.08);
+}
+.nav-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--mid); flex-shrink: 0;
+}
+.nav-item.active .nav-dot { background: var(--gold); }
+.nav-item[data-view="health"] .nav-dot { background: var(--t1); }
+.nav-item[data-view="health"].active .nav-dot { background: var(--gold); }
+
+.sidebar-footer {
+  margin-top: auto; padding: 14px 20px 20px;
+  border-top: 1px solid rgba(201,168,76,.12);
+}
+.session-chip {
+  font-size: 10px; color: rgba(240,234,216,.4);
+  line-height: 1.5;
+}
+.session-chip strong { color: var(--gold); font-weight: 500; }
+
+/* ── Main ────────────────────────────────────────────────────────────────── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+.topbar {
+  background: var(--cream);
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px;
+  height: 52px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px; font-weight: 600;
+  color: var(--charcoal); letter-spacing: .01em;
+}
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+.topbar-date { font-size: 11px; color: var(--mid); }
+.topbar-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--charcoal-2); display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; color: var(--gold);
+  letter-spacing: .05em;
+}
+
+.content {
+  flex: 1; overflow-y: auto;
+  padding: max(24px, env(safe-area-inset-left,0px));
+  padding-left: max(24px, env(safe-area-inset-left,0px));
+  padding-right: max(24px, env(safe-area-inset-right,0px));
+  padding-bottom: max(24px, env(safe-area-inset-bottom,0px));
+}
+
+/* ── Views ───────────────────────────────────────────────────────────────── */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ── Cards ───────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 18px 20px;
+  box-shadow: var(--shadow);
+}
+.card-label {
+  font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 8px;
+}
+.card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px; font-weight: 600; color: var(--charcoal);
+  margin-bottom: 4px;
+}
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+.mt16 { margin-top: 16px; }
+.mt20 { margin-top: 20px; }
+
+/* ── Score tiles ─────────────────────────────────────────────────────────── */
+.score-tile {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px 18px;
+  box-shadow: var(--shadow); position: relative; overflow: hidden;
+}
+.score-tile::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+}
+.score-tile.t1::before { background: var(--t1); }
+.score-tile.t2::before { background: var(--t2); }
+.score-tile.t3::before { background: var(--t3); }
+.score-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.score-badge {
+  font-size: 8.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 3px;
+}
+.t1 .score-badge { background: var(--t1-light); color: var(--t1); }
+.t2 .score-badge { background: var(--t2-light); color: var(--t2); }
+.t3 .score-badge { background: var(--t3-light); color: var(--t3); }
+.score-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px; font-weight: 700; line-height: 1;
+  margin: 8px 0 4px; font-variant-numeric: tabular-nums;
+}
+.t1 .score-num { color: var(--t1); }
+.t2 .score-num { color: var(--t2); }
+.t3 .score-num { color: var(--t3); }
+.score-label { font-size: 11.5px; font-weight: 500; color: var(--charcoal); }
+.score-sub { font-size: 10px; color: var(--mid); margin-top: 2px; }
+.score-bar {
+  height: 4px; border-radius: 2px; margin-top: 12px;
+  background: var(--cream-dark);
+  overflow: hidden;
+}
+.score-bar-fill { height: 100%; border-radius: 2px; }
+.t1 .score-bar-fill { background: var(--t1); }
+.t2 .score-bar-fill { background: var(--t2); }
+.t3 .score-bar-fill { background: var(--t3); }
+.score-trend {
+  font-size: 10px; color: var(--mid); margin-top: 6px;
+  display: flex; align-items: center; gap: 4px;
+}
+.trend-up { color: #2a7a4a; }
+.trend-down { color: #a03030; }
+
+/* ── Pulse items ─────────────────────────────────────────────────────────── */
+.pulse-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+}
+.pulse-item:last-child { border-bottom: none; }
+.pulse-status {
+  font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-top: 1px;
+}
+.status-motion { background: #cce8de; color: #1a6b50; }
+.status-stalled { background: #f5e0cc; color: #8a4010; }
+.status-done { background: #d4e8d0; color: #2a6020; }
+.status-new { background: var(--t1-light); color: var(--t1); }
+.pulse-text { font-size: 12.5px; color: var(--charcoal); line-height: 1.4; flex: 1; min-width: 0; }
+.pulse-owner { font-size: 10px; color: var(--mid); margin-top: 2px; }
+.pulse-truth {
+  font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 3px;
+  flex-shrink: 0; align-self: flex-start; margin-top: 2px;
+}
+
+/* ── Journey timeline ────────────────────────────────────────────────────── */
+.timeline { position: relative; padding-left: 24px; }
+.timeline::before {
+  content: ''; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 1px;
+  background: var(--gold); opacity: .3;
+}
+.timeline-item { position: relative; padding: 0 0 20px; }
+.timeline-dot {
+  position: absolute; left: -24px; top: 4px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--gold); border: 2px solid var(--card);
+  box-shadow: 0 0 0 1px var(--gold);
+}
+.timeline-date { font-size: 9.5px; color: var(--mid); letter-spacing: .04em; margin-bottom: 4px; }
+.timeline-title { font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600; color: var(--charcoal); margin-bottom: 4px; }
+.timeline-body { font-size: 11.5px; color: var(--mid); line-height: 1.5; }
+
+/* ── Strategy ────────────────────────────────────────────────────────────── */
+.strategy-driver {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.strategy-driver:last-child { border-bottom: none; }
+.driver-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--charcoal-2); color: var(--gold);
+  font-size: 10px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.driver-text { font-size: 12.5px; color: var(--charcoal); flex: 1; }
+.driver-owner { font-size: 10px; color: var(--mid); }
+.driver-status {
+  font-size: 9px; font-weight: 600; letter-spacing: .06em;
+  padding: 2px 7px; border-radius: 3px;
+}
+
+/* ── Thinking Space ──────────────────────────────────────────────────────── */
+.thinking-entry {
+  padding: 14px 16px; background: var(--card);
+  border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px;
+}
+.thinking-meta { font-size: 9.5px; color: var(--mid); margin-bottom: 6px; }
+.thinking-text { font-size: 12.5px; color: var(--charcoal); line-height: 1.6; }
+.thinking-input {
+  width: 100%; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--card); color: var(--charcoal);
+  font-family: 'Inter', sans-serif; font-size: 13px;
+  padding: 12px 14px; resize: vertical; min-height: 90px; outline: none;
+  transition: border-color .15s;
+}
+.thinking-input:focus { border-color: var(--gold); }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;
+  transition: all .15s;
+}
+.btn-gold {
+  background: var(--gold); color: var(--charcoal);
+}
+.btn-gold:hover { background: var(--gold-light); }
+
+/* ── Health bars ─────────────────────────────────────────────────────────── */
+.h-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.h-bar-label { font-size: 11px; color: var(--charcoal); width: 180px; flex-shrink: 0; }
+.h-bar-track { flex: 1; height: 6px; background: var(--cream-dark); border-radius: 3px; overflow: hidden; }
+.h-bar-fill { height: 100%; border-radius: 3px; }
+.h-bar-score { font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; width: 28px; text-align: right; flex-shrink: 0; }
+
+/* ── Metric tiles ────────────────────────────────────────────────────────── */
+.metric-tile {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 14px 16px;
+}
+.metric-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; font-weight: 700; color: var(--charcoal);
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.metric-label { font-size: 10.5px; color: var(--mid); margin-top: 4px; }
+.metric-delta { font-size: 10px; margin-top: 6px; }
+
+/* ── Weekly signal banner ────────────────────────────────────────────────── */
+.signal-banner {
+  background: linear-gradient(135deg, var(--charcoal-2) 0%, var(--charcoal-3) 100%);
+  border: 1px solid rgba(201,168,76,.3);
+  border-radius: 10px; padding: 16px 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.signal-label { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.signal-q { font-size: 13.5px; color: #f0ead8; line-height: 1.4; max-width: 500px; }
+.signal-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.signal-btn {
+  padding: 7px 14px; border-radius: 6px; border: 1px solid;
+  font-size: 11.5px; font-weight: 500; cursor: pointer;
+  transition: all .15s;
+}
+.signal-btn-yes { background: var(--gold); color: var(--charcoal); border-color: var(--gold); }
+.signal-btn-no { background: transparent; color: rgba(240,234,216,.6); border-color: rgba(240,234,216,.2); }
+.signal-btn-yes:hover { background: var(--gold-light); }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 680px) {
+  .sidebar { width: 56px; }
+  .sidebar-logo-text, .sidebar-logo-sub, .client-pill, .nav-label,
+  .nav-item span, .sidebar-footer { display: none; }
+  .nav-item { padding: 10px; justify-content: center; }
+  .grid-3 { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .signal-banner { flex-direction: column; align-items: flex-start; }
+}
+</style>
+
+<div class="app">
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-text">MOE</div>
+      <div class="sidebar-logo-sub">Momentum OS</div>
+    </div>
+
+    <div class="client-pill">
+      <div class="client-pill-name">Meridian Growth Co.</div>
+      <div class="client-pill-role">CEO View · Q4 2026 · $85M rev</div>
+    </div>
+
+    <nav class="nav-section">
+      <div class="nav-label">Overview</div>
+      <div class="nav-item active" data-view="dashboard">
+        <div class="nav-dot"></div>
+        <span>Dashboard</span>
+      </div>
+    </nav>
+
+    <nav class="nav-section">
+      <div class="nav-label">The Three Truths</div>
+      <div class="nav-item" data-view="health">
+        <div class="nav-dot" style="background:#1e4a7c"></div>
+        <span>Health</span>
+      </div>
+      <div class="nav-item" data-view="pulse">
+        <div class="nav-dot" style="background:#1a6b50"></div>
+        <span>Pulse</span>
+      </div>
+      <div class="nav-item" data-view="journey">
+        <div class="nav-dot" style="background:#7a5a10"></div>
+        <span>Journey</span>
+      </div>
+    </nav>
+
+    <nav class="nav-section">
+      <div class="nav-label">Strategy</div>
+      <div class="nav-item" data-view="strategy">
+        <div class="nav-dot"></div>
+        <span>Strategic Plan</span>
+      </div>
+      <div class="nav-item" data-view="foundation">
+        <div class="nav-dot"></div>
+        <span>Foundation</span>
+      </div>
+      <div class="nav-item" data-view="thinking">
+        <div class="nav-dot"></div>
+        <span>Thinking Space</span>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="session-chip">
+        Next session<br>
+        <strong>Dec 3 · 10:00 AM</strong>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-right">
+        <div class="topbar-date">November 22, 2026</div>
+        <div class="topbar-avatar">CG</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ── DASHBOARD ── -->
+      <div class="view active" id="view-dashboard">
+
+        <div class="signal-banner">
+          <div>
+            <div class="signal-label">Weekly Pulse · Week of Nov 18</div>
+            <div class="signal-q">What's the one thing you did this week that moved the business forward — and what got in the way?</div>
+          </div>
+          <div class="signal-actions">
+            <button class="signal-btn signal-btn-yes">Respond</button>
+            <button class="signal-btn signal-btn-no">Skip</button>
+          </div>
+        </div>
+
+        <div class="grid-3 mt20">
+          <div class="score-tile t1">
+            <div class="score-top">
+              <div class="score-badge">T1</div>
+              <span style="font-size:10px;color:var(--mid)">Win Customers</span>
+            </div>
+            <div class="score-num">6.5</div>
+            <div class="score-label">Customer Engine</div>
+            <div class="score-bar"><div class="score-bar-fill" style="width:65%"></div></div>
+            <div class="score-trend"><span class="trend-up">↑ +0.5</span> <span>from last quarter</span></div>
+          </div>
+          <div class="score-tile t2">
+            <div class="score-top">
+              <div class="score-badge">T2</div>
+              <span style="font-size:10px;color:var(--mid)">Build the Machine</span>
+            </div>
+            <div class="score-num">4.2</div>
+            <div class="score-label">Operations & Tech</div>
+            <div class="score-bar"><div class="score-bar-fill" style="width:42%"></div></div>
+            <div class="score-trend"><span class="trend-down" style="font-size:10px;color:#a03030">↓ −0.3</span> <span>from last quarter</span></div>
+          </div>
+          <div class="score-tile t3">
+            <div class="score-top">
+              <div class="score-badge">T3</div>
+              <span style="font-size:10px;color:var(--mid)">Build the Team</span>
+            </div>
+            <div class="score-num">7.0</div>
+            <div class="score-label">Leadership & Culture</div>
+            <div class="score-bar"><div class="score-bar-fill" style="width:70%"></div></div>
+            <div class="score-trend"><span class="trend-up">↑ +1.0</span> <span>from last quarter</span></div>
+          </div>
+        </div>
+
+        <div class="grid-2 mt16">
+          <div class="card">
+            <div class="card-label">Top Priorities This Week</div>
+            <div class="pulse-item">
+              <span class="pulse-status status-motion">In Motion</span>
+              <div>
+                <div class="pulse-text">Finalize Q1 sales hiring plan — two reps identified</div>
+                <div class="pulse-owner">Owner: Sarah M. · T1</div>
+              </div>
+            </div>
+            <div class="pulse-item">
+              <span class="pulse-status status-stalled">Stalled</span>
+              <div>
+                <div class="pulse-text">CRM migration — integration vendor still unresponsive</div>
+                <div class="pulse-owner">Owner: Dev team · T2</div>
+              </div>
+            </div>
+            <div class="pulse-item">
+              <span class="pulse-status status-done">Done</span>
+              <div>
+                <div class="pulse-text">Q4 leadership team offsite — alignment achieved on 2027 goals</div>
+                <div class="pulse-owner">Owner: CEO · T3</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-label">Key Metrics</div>
+            <div class="grid-2" style="gap:10px;margin-top:4px">
+              <div class="metric-tile">
+                <div class="metric-num">$148k</div>
+                <div class="metric-label">Revenue / Employee</div>
+                <div class="metric-delta"><span class="trend-up">↑ 12%</span> <span style="color:var(--mid)">YoY</span></div>
+              </div>
+              <div class="metric-tile">
+                <div class="metric-num">81%</div>
+                <div class="metric-label">Client Retention</div>
+                <div class="metric-delta"><span class="trend-up">↑ 4pts</span> <span style="color:var(--mid)">QoQ</span></div>
+              </div>
+              <div class="metric-tile">
+                <div class="metric-num">3.2×</div>
+                <div class="metric-label">Return on Payroll</div>
+                <div class="metric-delta"><span style="color:var(--mid)">Target: 3.5×</span></div>
+              </div>
+              <div class="metric-tile">
+                <div class="metric-num">NPS 54</div>
+                <div class="metric-label">Client Satisfaction</div>
+                <div class="metric-delta"><span class="trend-up">↑ 8pts</span> <span style="color:var(--mid)">QoQ</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt16">
+          <div class="card-label">Chuck's Pre-Session Note · Nov 28</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:400;font-style:italic;color:var(--charcoal);line-height:1.6;margin-top:4px;">
+            T2 is the constraint right now — the CRM stall is bleeding into the sales team's ability to track pipeline accurately. That's the right starting point. Sarah's hiring plan is ready; unblock that first. Leadership alignment from the offsite is strong — don't let it fade.
+          </div>
+        </div>
+      </div>
+
+      <!-- ── HEALTH ── -->
+      <div class="view" id="view-health">
+        <div class="card">
+          <div class="card-label">T1 · Win Customers</div>
+          <div class="card-title" style="color:var(--t1)">Score: 6.5 / 10</div>
+          <div style="margin-top:14px">
+            <div class="h-bar-row"><div class="h-bar-label">Pipeline strength & coverage</div><div class="h-bar-track"><div class="h-bar-fill" style="width:70%;background:var(--t1)"></div></div><div class="h-bar-score" style="color:var(--t1)">7.0</div></div>
+            <div class="h-bar-row"><div class="h-bar-label">Brand & market positioning</div><div class="h-bar-track"><div class="h-bar-fill" style="width:55%;background:var(--t1)"></div></div><div class="h-bar-score" style="color:var(--t1)">5.5</div></div>
+            <div class="h-bar-row"><div class="h-bar-label">Playing to win — focus & clarity</div><div class="h-bar-track"><div class="h-bar-fill" style="width:65%;background:var(--t1)"></div></div><div class="h-bar-score" style="color:var(--t1)">6.5</div></div>
+            <div class="h-bar-row"><div class="h-bar-label">Sales capability & process</div><div class="h-bar-track"><div class="h-bar-fill" style="width:60%;background:var(--t1)"></div></div><div class="h-bar-score" style="color:var(--t1)">6.0</div></div>
+          </div>
+        </div>
+
+        <div class="card mt16">
+          <div class="card-label">T2 · Build the Machine</div>
+          <div class="card-title" style="color:var(--t2)">Score: 4.2 / 10 — <span style="font-size:12px;color:#a03030">Constraint</span></div>
+          <div style="margin-top:14px">
+            <div class="h-bar-row"><div class="h-bar-label">Process reliability at scale</div><div class="h-bar-track"><div class="h-bar-fill" style="width:40%;background:var(--t2)"></div></div><div class="h-bar-score" style="color:var(--t2)">4.0</div></div>
+            <div class="h-bar-row"><div class="h-bar-label">Technology & systems fit</div><div class="h-bar-track"><div class="h-bar-fill" style="width:35%;background:var(--t2)"></div></div><div class="h-bar-score" style="color:var(--t2)">3.5</div></div>
+            <div class="h-bar-row"><div class="h-bar-label">Core capabilities in place</div><div class="h-bar-track"><div class="h-bar-fill" style="width:50%;background:var(--t2)"></div></div><div class="h-bar-score" style="color:var(--t2)">5.0</div></div>
+            <div class="h-bar-row"><div class="h-bar-label">Delivery without bottlenecks</div><div class="h-bar-track"><div class="h-bar-fill" style="width:40%;background:var(--t2)"></div></div><div class="h-bar-score" style="color:var(--t2)">4.0</div></div>
+          </div>
+        </div>
+
+        <div class="card mt16">
+          <div class="card-label">T3 · Build the Team</div>
+          <div class="card-title" style="color:var(--t3)">Score: 7.0 / 10</div>
+          <div style="margin-top:14px">
+            <div class="h-bar-row"><div class="h-bar-label">Leadership team development</div><div class="h-bar-track"><div class="h-bar-fill" style="width:75%;background:var(--t3)"></div></div><div class="h-bar-score" style="color:var(--t3)">7.5</div></div>
+            <div class="h-bar-row"><div class="h-bar-label">Culture strength & alignment</div><div class="h-bar-track"><div class="h-bar-fill" style="width:70%;background:var(--t3)"></div></div><div class="h-bar-score" style="color:var(--t3)">7.0</div></div>
+            <div class="h-bar-row"><div class="h-bar-label">Accountability & follow-through</div><div class="h-bar-track"><div class="h-bar-fill" style="width:65%;background:var(--t3)"></div></div><div class="h-bar-score" style="color:var(--t3)">6.5</div></div>
+            <div class="h-bar-row"><div class="h-bar-label">Tolerance of underperformance</div><div class="h-bar-track"><div class="h-bar-fill" style="width:70%;background:var(--t3)"></div></div><div class="h-bar-score" style="color:var(--t3)">7.0</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PULSE ── -->
+      <div class="view" id="view-pulse">
+        <div class="card">
+          <div class="card-label">Strategic Priorities — Q4 2026</div>
+          <div style="font-size:11px;color:var(--mid);margin-bottom:12px;line-height:1.5">High-impact moves that change the trajectory of the business — not tasks.</div>
+
+          <div class="pulse-item">
+            <span class="pulse-status status-motion">In Motion</span>
+            <div style="flex:1;min-width:0">
+              <div class="pulse-text">Build a repeatable enterprise sales motion — hire 2 senior reps by Jan 15</div>
+              <div class="pulse-owner">Owner: Sarah M. · <span style="color:var(--t1);font-weight:500">T1</span> · Due Dec 31</div>
+            </div>
+          </div>
+          <div class="pulse-item">
+            <span class="pulse-status status-stalled">Stalled</span>
+            <div style="flex:1;min-width:0">
+              <div class="pulse-text">CRM migration — Salesforce to HubSpot. Blocked on API vendor.</div>
+              <div class="pulse-owner">Owner: Dev Lead · <span style="color:var(--t2);font-weight:500">T2</span> · <span style="color:#a03030">What's blocking: Integration vendor unresponsive for 3 weeks</span></div>
+            </div>
+          </div>
+          <div class="pulse-item">
+            <span class="pulse-status status-motion">In Motion</span>
+            <div style="flex:1;min-width:0">
+              <div class="pulse-text">Define 2027 leadership competency model — post-offsite follow-through</div>
+              <div class="pulse-owner">Owner: CEO · <span style="color:var(--t3);font-weight:500">T3</span> · Due Nov 30</div>
+            </div>
+          </div>
+          <div class="pulse-item">
+            <span class="pulse-status status-new">New</span>
+            <div style="flex:1;min-width:0">
+              <div class="pulse-text">Develop mid-market pricing tier — opportunity identified in Q4 pipeline review</div>
+              <div class="pulse-owner">Owner: TBD · <span style="color:var(--t1);font-weight:500">T1</span> · Added Nov 18</div>
+            </div>
+          </div>
+          <div class="pulse-item">
+            <span class="pulse-status status-done">Done</span>
+            <div style="flex:1;min-width:0">
+              <div class="pulse-text">Q4 leadership team offsite — strategic alignment on 2027 goals</div>
+              <div class="pulse-owner">Owner: CEO · <span style="color:var(--t3);font-weight:500">T3</span> · Completed Nov 14</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt16">
+          <div class="card-label">Constraint Right Now</div>
+          <div style="display:flex;align-items:flex-start;gap:12px;margin-top:8px">
+            <div style="width:3px;align-self:stretch;background:var(--t2);border-radius:2px;flex-shrink:0"></div>
+            <div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--charcoal)">The CRM gap is bleeding into pipeline visibility</div>
+              <div style="font-size:12px;color:var(--mid);margin-top:4px;line-height:1.5">The sales team can't accurately track deals without a functioning system. This is slowing T1 progress even as the team is otherwise ready to move. T2 is the bottleneck holding T1 back.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── JOURNEY ── -->
+      <div class="view" id="view-journey">
+        <div class="card">
+          <div class="card-label">The Story of This Engagement</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--mid);margin-bottom:20px;line-height:1.6">
+            Meridian came in strong on team and culture but had a scattered approach to customers and a machine that was straining under growth. Here's what changed.
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:var(--gold)"></div>
+              <div class="timeline-date">November 2026</div>
+              <div class="timeline-title">Annual Strategy Session — 2027 Direction Set</div>
+              <div class="timeline-body">First time the full leadership team aligned on a single playing-to-win strategy. Decided to exit the SMB segment and go deep on mid-market. T3 score jumped to 7.0. T2 identified as the constraint.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:var(--t2)"></div>
+              <div class="timeline-date">August 2026</div>
+              <div class="timeline-title">What Didn't Work: Operational Restructure Attempt</div>
+              <div class="timeline-body">Tried a full process overhaul across three departments simultaneously. Created chaos and stalled delivery. Lesson: change one constraint at a time. Reversed course, isolated CRM as the single priority.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:var(--t3)"></div>
+              <div class="timeline-date">May 2026</div>
+              <div class="timeline-title">Big Move: Replaced VP of Sales</div>
+              <div class="timeline-body">CEO had been tolerating underperformance for 18 months. Making the change unlocked the team's confidence and was cited by the leadership team as the single biggest move of the year.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:var(--t1)"></div>
+              <div class="timeline-date">January 2026</div>
+              <div class="timeline-title">Engagement Start — Initial Diagnostic</div>
+              <div class="timeline-body">T1: 5.5 · T2: 4.5 · T3: 5.5. CEO's gut: "We're winning but it feels chaotic and I'm not sure the team can handle the next level." Classic constraint pattern — T2 was the limiter.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STRATEGY ── -->
+      <div class="view" id="view-strategy">
+        <div class="card">
+          <div class="card-label">Playing to Win</div>
+          <div class="grid-2" style="gap:12px;margin-top:8px">
+            <div>
+              <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:5px">Our Winning Aspiration</div>
+              <div style="font-size:13px;color:var(--charcoal);line-height:1.5">To be the go-to growth partner for mid-market professional services firms in the southeast — known for speed, accountability, and measurable outcomes.</div>
+            </div>
+            <div>
+              <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:5px">Where We Play</div>
+              <div style="font-size:13px;color:var(--charcoal);line-height:1.5">Mid-market professional services, $20M–$150M revenue. Southeast US, expanding nationally via referral. No SMB. No enterprise until T2 is solved.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt16">
+          <div class="card-label">Strategic Drivers — 2027</div>
+          <div style="font-size:11px;color:var(--mid);margin-bottom:12px">The moves that, if executed, change the company's trajectory.</div>
+          <div class="strategy-driver">
+            <div class="driver-num">1</div>
+            <div style="flex:1;min-width:0">
+              <div class="driver-text">Build a repeatable enterprise sales engine — process, talent, and tools</div>
+              <div class="driver-owner" style="color:var(--t1)">T1 · Owner: Sarah M.</div>
+            </div>
+            <div class="driver-status status-motion">In Motion</div>
+          </div>
+          <div class="strategy-driver">
+            <div class="driver-num">2</div>
+            <div style="flex:1;min-width:0">
+              <div class="driver-text">Modernize the technology stack — CRM, ops tools, reporting</div>
+              <div class="driver-owner" style="color:var(--t2)">T2 · Owner: COO</div>
+            </div>
+            <div class="driver-status status-stalled">Stalled</div>
+          </div>
+          <div class="strategy-driver">
+            <div class="driver-num">3</div>
+            <div style="flex:1;min-width:0">
+              <div class="driver-text">Develop the next layer of leadership — two directors ready for VP roles by Q3</div>
+              <div class="driver-owner" style="color:var(--t3)">T3 · Owner: CEO</div>
+            </div>
+            <div class="driver-status status-motion">In Motion</div>
+          </div>
+          <div class="strategy-driver">
+            <div class="driver-num">4</div>
+            <div style="flex:1;min-width:0">
+              <div class="driver-text">Launch mid-market pricing tier and packaging</div>
+              <div class="driver-owner" style="color:var(--t1)">T1 · Owner: TBD</div>
+            </div>
+            <div class="driver-status status-new">Planning</div>
+          </div>
+        </div>
+
+        <div class="card mt16">
+          <div class="card-label">Foundation</div>
+          <div class="grid-2" style="gap:12px;margin-top:8px">
+            <div>
+              <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:5px">Core Values</div>
+              <div style="font-size:12px;color:var(--charcoal);line-height:1.8">Accountability · Speed · Transparency · Growth Mindset</div>
+            </div>
+            <div>
+              <div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:5px">2027 Ambition</div>
+              <div style="font-size:12px;color:var(--charcoal);line-height:1.5">$12M ARR · 85% retention · 20-person team that can run without the CEO in every room</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── FOUNDATION ── -->
+      <div class="view" id="view-foundation">
+
+        <div class="card">
+          <div class="card-label">The Big Aspiration</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--charcoal);line-height:1.4;margin-top:4px;text-wrap:balance">
+            To build a company that runs and grows without depending on any one person — including me.
+          </div>
+          <div style="font-size:12px;color:var(--mid);margin-top:10px;line-height:1.6">
+            By 2030: $20M revenue, 95% client retention, a leadership team that can operate at full capacity independently, and a brand recognized across the southeast as the firm that actually delivers.
+          </div>
+        </div>
+
+        <div class="card mt16">
+          <div class="card-label">What Matters to the CEO</div>
+          <div style="font-size:11px;color:var(--mid);margin-bottom:14px;line-height:1.5">Personal priorities — what success looks like beyond the business.</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:flex-start;gap:12px">
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--t3-light);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <span style="font-size:11px;color:var(--t3);font-weight:600">1</span>
+              </div>
+              <div>
+                <div style="font-size:12.5px;font-weight:500;color:var(--charcoal)">Build something transferable</div>
+                <div style="font-size:11.5px;color:var(--mid);margin-top:2px;line-height:1.5">The company should be able to run without me. That's both the business goal and the personal freedom goal.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px">
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--t3-light);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <span style="font-size:11px;color:var(--t3);font-weight:600">2</span>
+              </div>
+              <div>
+                <div style="font-size:12.5px;font-weight:500;color:var(--charcoal)">Develop two people into exceptional leaders</div>
+                <div style="font-size:11.5px;color:var(--mid);margin-top:2px;line-height:1.5">Marcus and Jess have the ceiling. The goal is to give them the room and the runway to get there.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px">
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--t3-light);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <span style="font-size:11px;color:var(--t3);font-weight:600">3</span>
+              </div>
+              <div>
+                <div style="font-size:12.5px;font-weight:500;color:var(--charcoal)">Get back to strategy — out of operations</div>
+                <div style="font-size:11.5px;color:var(--mid);margin-top:2px;line-height:1.5">Spending more than 20% of my time in operations is a failure state. That's the personal metric I track.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2 mt16">
+          <div class="card">
+            <div class="card-label">Core Values</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:3px;height:28px;background:var(--gold);border-radius:2px;flex-shrink:0"></div>
+                <div>
+                  <div style="font-size:12px;font-weight:600;color:var(--charcoal)">Accountability</div>
+                  <div style="font-size:10.5px;color:var(--mid)">We do what we say. No exceptions.</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:3px;height:28px;background:var(--gold);border-radius:2px;flex-shrink:0"></div>
+                <div>
+                  <div style="font-size:12px;font-weight:600;color:var(--charcoal)">Speed</div>
+                  <div style="font-size:10.5px;color:var(--mid)">Move fast. Decide with the information you have.</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:3px;height:28px;background:var(--gold);border-radius:2px;flex-shrink:0"></div>
+                <div>
+                  <div style="font-size:12px;font-weight:600;color:var(--charcoal)">Transparency</div>
+                  <div style="font-size:10.5px;color:var(--mid)">Say the hard thing early, not after it costs us.</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:3px;height:28px;background:var(--gold);border-radius:2px;flex-shrink:0"></div>
+                <div>
+                  <div style="font-size:12px;font-weight:600;color:var(--charcoal)">Growth Mindset</div>
+                  <div style="font-size:10.5px;color:var(--mid)">We are always the student, never the expert.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="card">
+              <div class="card-label">Purpose — Why We Exist</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--charcoal);line-height:1.6;margin-top:4px">
+                To help founder-led businesses become institutions — companies that outlast their founders and multiply their impact.
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-label">Non-Negotiables</div>
+              <div style="font-size:12px;color:var(--charcoal);line-height:1.8;margin-top:4px">
+                No clients who don't want to be held accountable<br>
+                No work that doesn't connect to the three truths<br>
+                No growth that requires sacrificing culture
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── THINKING SPACE ── -->
+      <div class="view" id="view-thinking">
+        <div class="card">
+          <div class="card-label">CEO Thinking Space</div>
+          <div style="font-size:11.5px;color:var(--mid);margin-bottom:16px;line-height:1.5">Private. Only visible to you and Chuck before your session. Use this to think out loud — no structure required.</div>
+
+          <div class="thinking-entry">
+            <div class="thinking-meta">Nov 18, 2026 · Pre-session reflection</div>
+            <div class="thinking-text">I keep coming back to the CRM problem. It feels like a symptom. The real issue is that we've grown faster than our infrastructure and I've been avoiding the conversation about what it will cost to fix it properly. Need to stop treating this as a tech problem and start treating it as a strategic one.</div>
+          </div>
+
+          <div class="thinking-entry">
+            <div class="thinking-meta">Nov 10, 2026 · Post-offsite</div>
+            <div class="thinking-text">The offsite was better than I expected. The team is more aligned than I gave them credit for. The question I keep sitting with: am I the constraint? Am I holding back the people who could be leading more if I let them? Marcus is ready. I keep finding reasons not to give him the full P&L.</div>
+          </div>
+
+          <div style="margin-top:16px">
+            <div style="font-size:10.5px;color:var(--mid);margin-bottom:8px;letter-spacing:.06em;text-transform:uppercase">Add a reflection</div>
+            <textarea class="thinking-input" placeholder="What's on your mind? A question you're sitting with, something that's bothering you, an idea you haven't said out loud yet…"></textarea>
+            <div style="margin-top:8px">
+              <button class="btn btn-gold">Save reflection</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+const views = {
+  dashboard: 'Dashboard',
+  health: 'Health — Three Truths',
+  pulse: 'Pulse',
+  journey: 'Journey',
+  strategy: 'Strategic Plan',
+  foundation: 'Foundation',
+  thinking: 'Thinking Space'
+};
+
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const v = item.dataset.view;
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
+    item.classList.add('active');
+    document.getElementById('view-' + v).classList.add('active');
+    document.getElementById('topbar-title').textContent = views[v];
+    try { location.hash = v === 'dashboard' ? '' : v; } catch(e){}
+  });
+});
+
+// Restore hash on load
+(function() {
+  const h = location.hash.replace('#','');
+  if (h && views[h]) {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelector('[data-view="'+h+'"]').classList.add('active');
+    document.getElementById('view-'+h).classList.add('active');
+    document.getElementById('topbar-title').textContent = views[h];
+  }
+})();
+
+// Signal banner buttons
+document.querySelectorAll('.signal-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.signal-banner').style.opacity = '.5';
+    btn.closest('.signal-banner').style.pointerEvents = 'none';
+  });
+});
+
+// Thinking space save (demo)
+document.querySelector('.btn-gold').addEventListener('click', () => {
+  const ta = document.querySelector('.thinking-input');
+  if (!ta.value.trim()) return;
+  const entry = document.createElement('div');
+  entry.className = 'thinking-entry';
+  entry.innerHTML = '<div class="thinking-meta">Just now · New reflection</div><div class="thinking-text">' + ta.value.replace(/</g,'&lt;') + '</div>';
+  ta.closest('div').parentElement.insertBefore(entry, ta.closest('div'));
+  ta.value = '';
+});
+</script>
+
+</body></html>
